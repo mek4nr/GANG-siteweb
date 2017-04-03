@@ -1,28 +1,33 @@
+import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from filer.fields.image import FilerImageField
+from django.core.urlresolvers import reverse
+from gangdev.settings.base import DOMAIN_NAME
 
 
-class User(AbstractUser):
-    SEX_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-    )
-
-    sex = models.CharField(choices=SEX_CHOICES, max_length=1, null=True, blank=True)
-    profil_picture = FilerImageField(null=True, blank=True)
-
-    def get_profil_folder(self):
-        """
-        :return: The folder who image will be stored
-        """
-        return u"User/{}". \
-            format(self.pk)
-
-    def __unicode__(self):
-        ''' Return the username '''
-        return self.username
+class EmailCheck(models.Model):
+    user = models.ForeignKey("auth.User")
+    token = models.UUIDField(default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        ''' Return the username '''
-        return self.__unicode__()
+        return "{}" . format(self.user)
+
+    def __unicode__(self):
+        return self.__str__()
+
+    def is_alive(self):
+        return True
+
+    def active_link(self):
+        return "{}{}" .format(DOMAIN_NAME, reverse("active", kwargs={
+                                'token': str(self.token),
+                                'username': self.user.username,
+                                }))
+
+    def check_token(self):
+        if self.is_alive():
+            self.user.is_active = True
+            self.user.save()
+            return True
+        else:
+            return False

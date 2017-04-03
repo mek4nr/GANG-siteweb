@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load cms_tags staticfiles sekizai_tags menu_tags auth_tags %}
+{% block content %}
+<div class="form-signin">
+
+
+    <form action="" method="post">{% csrf_token %}
+        <h2 class="secondary4-color  center titleMargin center">{{ _('Please, Sign In') }}</h2>
+        {{ form.errors }}
+        {% for f in form %}
+            <div class="form-group" >{{ f.label}}<br>{{ f }}</div>
+        {% endfor %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input type="submit" value="{{ _('Login') }}" class="btn btn-lg btn-block btn-success"/>
+            <br>
+            <a href="{% url 'password_forgot' %}">{{ _('Forgot your password ?') }}</a>
+    </form>
+
+<div class="row loginSignup">
+    {{ _('Don t  have an account ?') }}
+    <a href="{% url 'subscribe' %}?next={{ request.GET.next }}" class="btn btn-default">{{ _('Sign up') }}</a>
+</div>
+</div>
+<style>
+    .form-signin{
+        max-width: 330px;
+        padding: 15px;
+        margin: 20px auto 0px;
+        border: 1px solid rgba(14, 41, 57, 0.1);
+    }
+</style>
+{% endblock %}

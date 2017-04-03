@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+{% block content %}
+{% if pass %}
+    Your account is now activate
+{% else %}
+    This link is no more valide, click here to generate a new one : <a href="{{ url }}">Generate Link</a>
+{% endif %}
+{% endblock %}

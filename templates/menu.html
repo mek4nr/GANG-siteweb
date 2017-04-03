@@ -1,0 +1,60 @@
+{% load i18n menu_tags cache auth_tags %}
+
+<ul class="nav navbar-nav">
+{% for child in children %}
+
+    {% if not child.attr.right == True %}
+        <li class="{% if child.ancestor %}ancestor{% endif %}{% if child.selected %} active{% endif %}{% if child.children %} dropdown{% endif %}">
+            {% if child.children %}<a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ child.get_menu_title }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {% show_menu from_level to_level extra_inactive extra_active template "" "" child %}
+            </ul>
+            {% else %}
+            <a href="{{ child.get_absolute_url }}"><span>{{ child.get_menu_title }}</span></a>
+            {% endif %}
+        </li>
+        {% if class and forloop.last and not forloop.parentloop %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+</ul>
+<ul class="nav navbar-nav navbar-right">
+{% for child in children %}
+    {% if child.attr.login == True %}
+        <li class="dropdown{% if messages|has_login_message  %} open {%endif%}">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ child.get_menu_title }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.extra_tags == "login" %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <form action="{% url 'login' %}" method="POST">
+                    {{ request.message }}
+                    {% for f in child.attr.login_form %}
+                        <div>{{f.label_tag}}{{ f }}</div>
+                    {% endfor %}
+                    {% csrf_token %}
+                    {% if request.GET.next %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    {% endif %}
+                    <input type="submit" value="{% trans 'Login' %}" />
+                    <a href="{% url 'password_forgot' %}" >{% trans "Forgot password" %}</a>
+                </form>
+            </ul>
+    {% elif child.attr.right == True %}
+        <li class="{% if child.ancestor %}ancestor{% endif %}{% if child.selected %} active{% endif %}{% if child.children %} dropdown{% endif %}">
+
+            {% if child.children %}<a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ child.get_menu_title }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {% show_menu from_level to_level extra_inactive extra_active template "" "" child %}
+            </ul>
+            {% else %}
+            <a href="{{ child.get_absolute_url }}"><span>{{ child.get_menu_title }}</span></a>
+            {% endif %}
+        </li>
+    {% endif %}
+{% endfor %}
+</ul>
