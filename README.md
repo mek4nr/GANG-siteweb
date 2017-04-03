@@ -1,13 +1,5 @@
-# Installation GANG-siteweb
+# Utilisation de GANG-siteweb
 
-## Basique
-
-1. Install GitBash https://git-for-windows.github.io/
-2. Ouvrir GitBash dans le dossier du projet (click droit git bash here)
-3. Faire les commandes suivantes : 
-   * pip install -r requirement.txt
-   * export DJANGO_SETTINGS_MODULE=gangdev.settings.dev
-   * python manage.py runserver
 
 ## Avec environnement de travail
 
@@ -34,3 +26,12 @@
    * workon envname
     
 
+## Installation
+
+1. Install GitBash https://git-for-windows.github.io/
+2. Ouvrir GitBash dans le dossier du projet (click droit git bash here)
+3. Faire les commandes suivantes : 
+   * pip install -r requirement.txt
+   * export DJANGO_SETTINGS_MODULE=gangdev.settings.dev
+   * python manage.py runserver
+   * Ouvrir votre navigateur a l'adresse : localhost:8000
