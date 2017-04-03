@@ -22,7 +22,7 @@
    * mkvirtualenv envname
    
    
-### Activier un environnement
+### Activer un environnement
    * workon envname
     
 
